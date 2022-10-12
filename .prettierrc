@@ -7,5 +7,17 @@
   "bracketSpacing": true,
   "semi": true,
   "trailingComma": "all",
-  "arrowParens": "always"
+  "arrowParens": "always",
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "(^models/(.*)$|models)",
+    "(^controllers/(.*)$|controllers)",
+    "(^routes/(.*)$|routes)",
+    "(^middlewares/(.*)$|middlewares)",
+    "(^errors/(.*)$|errors)",
+    "(^settings/(.*)$|settings)",
+    "^[./]"
+  ]
 }

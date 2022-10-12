@@ -1,17 +1,19 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "target": "es6",
     "esModuleInterop": true,
-    "target": "es5",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
     "strictNullChecks": true,
     "outDir": "build",
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
-      "*": ["node_modules/*"]
+      "*": [
+        "./src/*"
+      ]
     }
   },
-  "include": [ "**/*.ts", "**/*.js"]
+  "include": ["**/*.ts", "**/*.js"],
+  "exclude": ["node_modules"]
 }
