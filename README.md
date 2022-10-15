@@ -34,6 +34,7 @@ type TUserModel = {
 
 # REST API
 The REST API to the example app is described below.
+Private routes are protected by `checkAuth`.
 ## Login with OAuth
 ### Request
 `GET /auth/google`
@@ -80,6 +81,7 @@ PORT=3000 (default)
 
 MONGODB_URI=mongodb://localhost:27017/your-database
 
+Linux: `openssl rand -hex 32` or go to https://generate-secret.now.sh/32
 EXPESS_SESSION_SECRET=this-secret-rocks
 
 OAUTH_CALLBACK_URL=http://localhost:$PORT

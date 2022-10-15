@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import passport from 'passport';
 
+import { checkAuth } from '../middlewares';
 import { deserializeUser, logout, serializeUser } from '../middlewares/oauth';
 
 import { routerGithubOauth } from './github-oauth';
@@ -18,6 +19,10 @@ rootRouter.post('/auth/logout', logout);
 
 rootRouter.get('/', (req, res) => {
   res.send({ user: req.user ?? 'undefined user' });
+});
+
+rootRouter.get('/check-auth', checkAuth, (req, res) => {
+  res.send({ route: 'this private routes' });
 });
 
 export { rootRouter };
