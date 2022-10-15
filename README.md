@@ -37,11 +37,11 @@ The REST API to the example app is described below.
 ## Login with OAuth
 ### Request
 `GET /auth/google`
-```http request
+```
 curl -i -H 'Accept: application/json' http://localhost:3000/auth/google
 ```
 `GET /auth/github`
-```http request
+```
 curl -i -H 'Accept: application/json' http://localhost:3000/auth/github
 ```
 
@@ -69,11 +69,31 @@ curl -i -H 'Accept: application/json' http://localhost:3000/auth/github
 ```
 ### Request
 `POST /auth/logout`
-
+### Response
 Invoking `/auth/logout` will remove the req.user property and clear the login session.
 
 
 ## Usage
+#### Before running the project, configure the `.env` file at the root of the project.
+```
+PORT=3000 (default)
+
+MONGODB_URI=mongodb://localhost:27017/your-database
+
+EXPESS_SESSION_SECRET=this-secret-rocks
+
+OAUTH_CALLBACK_URL=http://localhost:$PORT
+
+GOOGLE_ID=
+GOOGLE_SECRET=
+
+GITHUB_ID=
+GITHUB_SECRET=
+
+FACEBOOK_ID=
+FACEBOOK_SECRET=
+```
+
 #### Starting the server in development mode
 
 ```
