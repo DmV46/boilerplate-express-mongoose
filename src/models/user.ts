@@ -10,10 +10,10 @@ export type TUserModel = {
   first_name?: string;
   last_name?: string;
   role?: 'admin' | 'user';
-  email: string;
+  email?: string;
   providers: TUserProvider[];
-  date_of_creation?: Date;
   avatar?: string;
+  date_of_creation?: Date;
 };
 
 const userSchema = new mongoose.Schema<TUserModel>({
@@ -35,12 +35,21 @@ const userSchema = new mongoose.Schema<TUserModel>({
     default: 'user',
   },
   email: {
-    unique: true,
     type: String,
     required: true,
     validate: [validator.isEmail, 'Please enter valid email address'],
+    default: 'no set email',
   },
-  providers: [{ id: String, provider: String }],
+  providers: {
+    type: [
+      {
+        _id: false,
+        id: String,
+        provider: String,
+      },
+    ],
+    default: [],
+  },
   date_of_creation: {
     type: Date,
     default: new Date(),

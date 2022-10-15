@@ -1,45 +1,23 @@
-import { Strategy } from 'passport-google-oauth20';
-
-import { TUserModel, User } from '../models';
+import { Profile, Strategy } from 'passport-google-oauth20';
+import { VerifyCallback } from 'passport-oauth2';
 
 import { OAUTH_CALLBACK_URL } from '../settings';
 
-export const googleStrategy = new Strategy(
-  {
-    clientID: process.env.GOOGLE_ID as string,
-    clientSecret: process.env.GOOGLE_SECRET as string,
-    callbackURL: `${OAUTH_CALLBACK_URL}/auth/google/callback`,
-  },
-  (accessToken, refreshToken, profile, cb) => {
-    void (async () => {
-      console.log(accessToken, refreshToken, profile, cb);
-      const {
-        id,
-        provider,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        _json: { email, picture: avatar, given_name, family_name },
-      } = profile;
+import { verifyUserBySocial } from './oauth';
 
-      const userProvider = { id, provider };
+const googleOptions = {
+  clientID: process.env.GOOGLE_ID as string,
+  clientSecret: process.env.GOOGLE_SECRET as string,
+  callbackURL: `${OAUTH_CALLBACK_URL}/auth/callback/google`,
+};
 
-      const user = await User.findOne({ providers: { $elemMatch: userProvider } });
+const googleVerify = (accessToken: string, refreshToken: string, profile: Profile, cb: VerifyCallback): void => {
+  void (async () => {
+    const { id, provider } = profile;
+    const { email, picture, given_name, family_name } = profile._json;
 
-      if (user != null) {
-        return cb(null, user);
-      }
+    await verifyUserBySocial(id, provider, email, given_name, family_name, picture, cb);
+  })();
+};
 
-      const newUser: TUserModel = {
-        first_name: given_name,
-        last_name: family_name,
-        avatar,
-        email: email as string,
-        date_of_creation: new Date(),
-        providers: [userProvider],
-      };
-
-      const userCreated = await User.create(newUser);
-
-      return cb(null, userCreated);
-    })();
-  },
-);
+export const googleStrategy = new Strategy(googleOptions, googleVerify);

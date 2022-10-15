@@ -9,7 +9,7 @@ import passport from 'passport';
 
 import { rootRouter } from './routes';
 
-import { csrfToken, googleStrategy, rateLimiter } from './middlewares';
+import { csrfToken, githubStrategy, googleStrategy, rateLimiter } from './middlewares';
 
 import { EXPESS_SESSION_SECRET, MONGODB_URI, PORT } from './settings';
 
@@ -33,6 +33,7 @@ app.use(csrf());
 app.use(csrfToken);
 
 passport.use(googleStrategy);
+passport.use(githubStrategy);
 
 // requestLogger;
 app.use(rootRouter);
