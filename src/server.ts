@@ -9,7 +9,15 @@ import passport from 'passport';
 
 import { rootRouter } from './routes';
 
-import { csrfToken, githubStrategy, googleStrategy, rateLimiter } from './middlewares';
+import {
+  csrfToken,
+  errorHandler,
+  errorLogger,
+  githubStrategy,
+  googleStrategy,
+  rateLimiter,
+  requestLogger,
+} from './middlewares';
 
 import { EXPESS_SESSION_SECRET, MONGODB_URI, PORT } from './settings';
 
@@ -26,17 +34,22 @@ app.use(helmet());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 app.use(session({ secret: EXPESS_SESSION_SECRET, resave: false, saveUninitialized: false }));
+
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use(csrf());
 app.use(csrfToken);
 
 passport.use(googleStrategy);
 passport.use(githubStrategy);
 
-// requestLogger;
+app.use(requestLogger);
 app.use(rootRouter);
-// errorLogger;
+app.use(errorLogger);
+
+app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Start on port: ${PORT}`));

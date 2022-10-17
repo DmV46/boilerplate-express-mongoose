@@ -4,3 +4,5 @@ export { githubStrategy } from './github-oauth';
 export { csrfToken } from './csrf';
 export { logout } from './oauth';
 export { checkAuth } from './check-auth';
+export { errorHandler } from './error-handler';
+export { errorLogger, requestLogger } from './logger';
