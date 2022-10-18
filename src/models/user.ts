@@ -11,6 +11,7 @@ export type TUserModel = {
   last_name?: string;
   role?: 'admin' | 'user';
   email?: string;
+  password?: string;
   providers: TUserProvider[];
   avatar?: string;
   date_of_creation?: Date;
@@ -36,9 +37,14 @@ const userSchema = new mongoose.Schema<TUserModel>({
   },
   email: {
     type: String,
-    required: true,
     validate: [validator.isEmail, 'Please enter valid email address'],
     default: 'no set email',
+  },
+  password: {
+    type: String,
+    minlength: 8,
+    select: false,
+    default: 'no set password',
   },
   providers: {
     type: [
@@ -63,6 +69,7 @@ const userSchema = new mongoose.Schema<TUserModel>({
 userSchema.set('toJSON', {
   transform: function (doc, ret) {
     ret.id = ret._id;
+    delete ret.password;
     delete ret._id;
     delete ret.__v;
 

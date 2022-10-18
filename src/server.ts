@@ -1,6 +1,5 @@
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import csrf from 'csurf';
 import express from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
@@ -10,7 +9,7 @@ import passport from 'passport';
 import { rootRouter } from './routes';
 
 import {
-  csrfToken,
+  credentialsStrategy,
   errorHandler,
   errorLogger,
   githubStrategy,
@@ -35,16 +34,26 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use(session({ secret: EXPESS_SESSION_SECRET, resave: false, saveUninitialized: false }));
+app.use(
+  session({
+    name: 'app-sesson-id',
+    secret: EXPESS_SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 3600000 * 24 * 7, // 7 days
+      httpOnly: true,
+      sameSite: true,
+    },
+  }),
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(csrf());
-app.use(csrfToken);
-
 passport.use(googleStrategy);
 passport.use(githubStrategy);
+passport.use(credentialsStrategy);
 
 app.use(requestLogger);
 app.use(rootRouter);

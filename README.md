@@ -26,6 +26,7 @@ type TUserModel = {
   last_name?: string;
   role?: 'admin' | 'user';
   email?: string;
+  password?: string;
   providers: TUserProvider[];
   avatar?: string;
   date_of_creation?: Date;
@@ -35,19 +36,55 @@ type TUserModel = {
 # REST API
 The REST API to the example app is described below.
 Private routes are protected by `checkAuth`.
+
+## Create user
+After successful registration, you need to log in using OAuth on the `/auth/credentials` route.
+
+### Request
+`POST /signup`
+
+```json
+{
+  "first_name": "your first name", 
+  "last_name": "your last name",
+  "email": "email@email.com",
+  "password":"12345678"
+}
+```
+### Response
+```json
+{
+  "id":"634af9651af079447365e73e",
+  "first_name":"your first name",
+  "last_name":"your last name",
+  "role":"user",
+  "email": "email@email.com",
+  "providers":[],
+  "date_of_creation":"2022-10-15T18:18:13.681Z",
+  "avatar":"https://lh3.googleusercontent.com/a/ALm5wu2FQRpPSy3wCfBC6m6ttuuRJ6vKdDxbxKvYeibF=s96-c"
+}
+```
+
+
 ## Login with OAuth
 If an error occurs, redirect to `/login`
 
 ### Request
-`GET /auth/google`
-```
-curl -i -H 'Accept: application/json' http://localhost:3000/auth/google
+`POST /auth/credentials`
+
+```json
+{
+  "email": "email@email.com",
+  "password":"12345678"
+}
 ```
 
+
+`GET /auth/google`
+
+
 `GET /auth/github`
-```
-curl -i -H 'Accept: application/json' http://localhost:3000/auth/github
-```
+
 
 ### Response
 ```json
@@ -78,6 +115,7 @@ Redirect to `/`
 
 ### Request
 `POST /auth/logout`
+
 ### Response
 Invoking `/auth/logout` will remove the req.user property and clear the login session.
 
